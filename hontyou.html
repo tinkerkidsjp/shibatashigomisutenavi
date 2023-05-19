@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>新発田市本町ゴミ捨てナビ</title>
+<title>新発田市本町ごみ捨てナビ</title>
 <script>
 function moeru() {
     var now = new Date();
@@ -24,7 +24,7 @@ function moeru() {
     } else if (month == 12 && date == 30 || month == 12 && date == 31 || month == 1 && date == 1){
         document.getElementById('moeru').textContent = '1/4(木)';
     } else if (month == 3 && date == 30 || month == 3 && date == 31){
-        document.getElementById('moeru').textContent = '次の収集日は市役所のホームページで確認してください。';
+        document.getElementById('moeru').textContent = '次の収集日は市のホームページで確認してください。';
     // 曜日は0が日曜　もし現在の曜日が月・水・金曜なら
     } else if (dayOfWeek == 1 || dayOfWeek == 3 || dayOfWeek == 5) {
         // 現在の日付に1日足す(例1月1日→1月2日　2月29日→3月1日)
@@ -98,7 +98,7 @@ function answer(calendar) {
             } else {
                 // if文の場合（）がそのif文が発動する条件で｛｝が処理 　もしカレンダーの一番最後の日付けなら
                 if (i == calendar.length - 1) {
-                    answerDates.push('次の収集日は市役所のホームページで確認してください。');
+                    answerDates.push('次の収集日は市のホームページで確認してください。');
                 }
             }
         // でなければもし今日の月がカレンダーの月よりも小さかったら
@@ -183,23 +183,23 @@ button {
 <!--全体を中央に寄せる-->
 <body style="text-align: center">
 <!--<h1>で大見出し（題名などを書く）、<br>で改行-->
-<h1>新発田市本町<br>ゴミ捨てナビ</h1>
+<h1>新発田市本町<br>ごみ捨てナビ</h1>
 <!--<p>段落（本文を書く時に使う）-->
 <p>2023年4月～2024年3月</p>
-<p>ゴミの種類をタップすると<br>その種類の一覧表が出ます</p>
+<p>ごみの種類をタップすると<br>その種類の一覧表が出ます</p>
 <table>
     <tr>
-        <th>ゴミの種類</th>
+        <th>ごみの種類</th>
         <th>次の収集日</th>
     </tr>
     <tr>
         <!--セルにリンクを貼る-->
-        <td><a href="moeru_hon.html">燃えるゴミ</a></td>
-        <!--燃えるゴミの収集日の欄にmoeruというIdをつけている-->
+        <td><a href="moeru_hon.html">燃えるごみ</a></td>
+        <!--燃えるごみの収集日の欄にmoeruというIdをつけている-->
         <td id="moeru"></td>
     </tr>
     <tr>
-        <td><a href="moenai_hon.html">燃えないゴミ</a></td>
+        <td><a href="moenai_hon.html">燃えないごみ</a></td>
         <td id="moenai"></td>
     </tr>
     <tr>
@@ -219,11 +219,11 @@ button {
         <td id="sinbun"></td>
     </tr>
     <tr>
-        <td><a href="akibin_hon.html">空き瓶</a></td>
+        <td><a href="akibin_hon.html">空きびん</a></td>
         <td id="akibin"></td>
     </tr>
 </table>
 <p>詳しい分別方法は<a href="https://www.city.shibata.lg.jp/kurashi/gomi/gomi/dashikata/1001150.html">市のホームページ</a>で<br>確認してください。</p>
-<a href="index.html"><button>新発田市ゴミ捨てナビに戻る</button></a>
+<a href="index.html"><button>新発田市ごみ捨てナビに戻る</button></a>
 </body>
 </html>
