@@ -2,6 +2,7 @@
 body {
 	background-color: rgb(255, 255, 255);
     text-align: center;
+    font-family: sans-serif;
 }
 table {
     font-size: 14px;
