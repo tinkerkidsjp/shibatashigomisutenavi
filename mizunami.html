@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>新発田市弓越（赤沼町内会）ごみ捨てナビ</title>
+<title>新発田市瑞波ごみ捨てナビ</title>
 <script>
 function moeru() {
     var now = new Date();
@@ -16,7 +16,7 @@ function moeru() {
         document.getElementById('moeru').textContent = '10/11(水)';
     } else if (month == 11 && date == 1 || month == 11 && date == 2){
         document.getElementById('moeru').textContent = '11/6(月)';
-    } else if (month == 12 && date == 29 || month == 12 && date == 30 || month == 12 && date == 31 || month == 1 && date == 1 || month == 1 && date == 2){
+    } else if (month == 12 && date == 29 || month == 12 && date == 30 || month == 12 && date == 31 || month == 1 && date == 1 || month == 1 && date == 2 || month == 1 && date == 3){
         document.getElementById('moeru').textContent = '1/5(金)';
     } else if (month == 1 && date == 5 || month == 1 && date == 6 || month == 1 && date == 7){
         document.getElementById('moeru').textContent = '1/10(水)';
@@ -50,12 +50,12 @@ function moeru() {
     }
 }
 
-var moenaiCalendar = ['0415','0520','0617','0715','0819','0916','1021','1118','1216','1320','1417','1516'];
-var akikanCalendar = ['0408','0422','0513','0527','0610','0624','0708','0722','0812','0826','0909','0930','1014','1028','1111','1125','1209','1223','1313','1327','1410','1424','1509','1523'];
-var happouCalendar = ['0408','0513','0610','0708','0812','0909','1014','1111','1209','1313','1410','1509'];
-var furununoCalendar = ['0422','0527','0624','0722','0826','0930','1028','1125','1223','1327','1424','1523'];
-var sinbunCalendar = ['0406','0421','0509','0524','0608','0621','0706','0724','0803','0828','0907','0922','1005','1023','1107','1122','1207','1220','1309','1326','1406','1426','1507','1522'];
-var akibinCalendar = ['0407','0510','0609','0707','0804','0908','1006','1108','1208','1310','1407','1508'];
+var moenaiCalendar = ['0413','0518','0615','0713','0817','0914','1019','1116','1221','1318','1415','1514'];
+var akikanCalendar = ['0406','0420','0511','0525','0608','0622','0706','0720','0810','0824','0907','0921','1012','1026','1109','1130','1214','1228','1311','1325','1408','1422','1507','1521'];
+var happouCalendar = ['0406','0511','0608','0706','0810','0907','1012','1109','1214','1311','1408','1507'];
+var furununoCalendar = ['0420','0525','0622','0720','0824','0921','1026','1130','1228','1325','1422','1521'];
+var sinbunCalendar = ['0410','0425','0512','0525','0609','0627','0710','0725','0809','0828','0908','0926','1011','1024','1110','1127','1208','1225','1315','1325','1409','1426','1508','1526'];
+var akibinCalendar = ['0426','0526','0628','0726','0829','0927','1025','1128','1226','1326','1427','1527'];
 var answerDates = [];
 
 function answer(calendar) {
@@ -155,7 +155,7 @@ button {
 </style>
 </head>
 <body style="text-align: center; font-family: sans-serif;">
-<h1>新発田市弓越<br>（赤沼町内会）<br>ごみ捨てナビ</h1>
+<h1>新発田市瑞波<br>ごみ捨てナビ</h1>
 <p>2023年4月～2024年3月</p>
 <p>ごみの種類をタップすると<br>その種類の一覧表が出ます</p>
 <table>
@@ -164,31 +164,31 @@ button {
         <th>次の収集日</th>
     </tr>
     <tr>
-        <td><a href="moeru_mikosi.html">燃えるごみ</a></td>
+        <td><a href="moeru_mizunami.html">燃えるごみ</a></td>
         <td id="moeru"></td>
     </tr>
     <tr>
-        <td><a href="moenai_mikosi.html">燃えないごみ</a></td>
+        <td><a href="moenai_mizunami.html">燃えないごみ</a></td>
         <td id="moenai"></td>
     </tr>
     <tr>
-        <td><a href="akikan_mikosi.html">空き缶類</a></td>
+        <td><a href="akikan_mizunami.html">空き缶類</a></td>
         <td id="akikan"></td>
     </tr>
     <tr>
-        <td><a href="happou_mikosi.html">発泡スチロール</a></td>
+        <td><a href="happou_mizunami.html">発泡スチロール</a></td>
         <td id="happou"></td>
     </tr>
     <tr>
-        <td><a href="furununo_mikosi.html">古布</a></td>
+        <td><a href="furununo_mizunami.html">古布</a></td>
         <td id="furununo"></td>
     </tr>
     <tr>
-        <td style="font-size: 15px;"><a href="sinbun_mikosi.html">新聞、段ボール、雑誌、チラシ</a></td>
+        <td style="font-size: 15px;"><a href="sinbun_mizunami.html">新聞、段ボール、雑誌、チラシ</a></td>
         <td id="sinbun"></td>
     </tr>
     <tr>
-        <td><a href="akibin_mikosi.html">空きびん</a></td>
+        <td><a href="akibin_mizunami.html">空きびん</a></td>
         <td id="akibin"></td>
     </tr>
 </table>
