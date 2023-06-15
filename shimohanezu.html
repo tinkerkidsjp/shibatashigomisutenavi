@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>新発田市住吉町2～5丁目ごみ捨てナビ</title>
+<title>新発田市下羽津ごみ捨てナビ</title>
 <script>
 function moeru() {
     var now = new Date();
@@ -24,7 +24,7 @@ function moeru() {
         document.getElementById('moeru').textContent = '2/14(水)';
     } else if (month == 2 && date == 21 || month == 2 && date == 22){
         document.getElementById('moeru').textContent = '2/26(月)';
-    } else if (month == 3 && date == 18 || month == 3 && date ==19){
+    } else if (month == 3 && date == 18 || month == 3 && date == 19){
         document.getElementById('moeru').textContent = '3/22(金)';
     } else if (month == 3 && date == 29 || month == 3 && date == 30 || month == 3 && date == 31){
         document.getElementById('moeru').textContent = '次の収集日は市のホームページで確認してください。';
@@ -50,12 +50,12 @@ function moeru() {
     }
 }
 
-var moenaiCalendar = ['0418','0516','0613','0711','0815','0912','1017','1114','1219','1316','1413','1512'];
-var akikanCalendar = ['0411','0425','0509','0523','0606','0620','0704','0718','0808','0822','0905','0919','1010','1024','1107','1121','1212','1226','1309','1323','1406','1420','1505','1519'];
-var happouCalendar = ['0411','0509','0606','0704','0808','0905','1010','1107','1212','1309','1406','1505'];
-var furununoCalendar = ['0425','0523','0620','0718','0822','0919','1024','1121','1226','1323','1420','1519'];
-var sinbunCalendar = ['0404','0419','0501','0522','0606','0619','0704','0721','0801','0825','0905','0920','1003','1020','1101','1120','1205','1218','1304','1324','1401','1421','1505','1518'];
-var akibinCalendar = ['0405','0502','0607','0705','0802','0906','1004','1102','1206','1305','1402','1506'];
+var moenaiCalendar = ['0413','0518','0615','0713','0817','0914','1019','1116','1221','1318','1415','1514'];
+var akikanCalendar = ['0406','0420','0511','0525','0608','0622','0706','0720','0810','0824','0907','0921','1012','1026','1109','1130','1214','1228','1311','1325','1408','1422','1507','1521'];
+var happouCalendar = ['0406','0511','0608','0706','0810','0907','1012','1109','1214','1311','1408','1507'];
+var furununoCalendar = ['0420','0525','0622','0720','0824','0921','1026','1130','1228','1325','1422','1521'];
+var sinbunCalendar = ['0413','0428','0516','0531','0615','0628','0713','0731','0817','0831','0914','0929','1012','1030','1114','1129','1214','1227','1316','1331','1413','1429','1514','1529'];
+var akibinCalendar = ['0414','0517','0616','0714','0818','0915','1013','1115','1215','1317','1414','1515'];
 var answerDates = [];
 
 function answer(calendar) {
@@ -155,7 +155,7 @@ button {
 </style>
 </head>
 <body style="text-align: center; font-family: sans-serif;">
-<h1>新発田市住吉町<br>2～5丁目<br>ごみ捨てナビ</h1>
+<h1>新発田市下羽津<br>ごみ捨てナビ</h1>
 <p>2023年4月～2024年3月</p>
 <p>ごみの種類をタップすると<br>その種類の一覧表が出ます</p>
 <table>
@@ -164,31 +164,31 @@ button {
         <th>次の収集日</th>
     </tr>
     <tr>
-        <td><a href="moeru_sumiyosi2~5.html">燃えるごみ</a></td>
+        <td><a href="moeru_shimohanezu.html">燃えるごみ</a></td>
         <td id="moeru"></td>
     </tr>
     <tr>
-        <td><a href="moenai_sumiyosi2~5.html">燃えないごみ</a></td>
+        <td><a href="moenai_shimohanezu.html">燃えないごみ</a></td>
         <td id="moenai"></td>
     </tr>
     <tr>
-        <td><a href="akikan_sumiyosi2~5.html">空き缶類</a></td>
+        <td><a href="akikan_shimohanezu.html">空き缶類</a></td>
         <td id="akikan"></td>
     </tr>
     <tr>
-        <td><a href="happou_sumiyosi2~5.html">発泡スチロール</a></td>
+        <td><a href="happou_shimohanezu.html">発泡スチロール</a></td>
         <td id="happou"></td>
     </tr>
     <tr>
-        <td><a href="furununo_sumiyosi2~5.html">古布</a></td>
+        <td><a href="furununo_shimohanezu.html">古布</a></td>
         <td id="furununo"></td>
     </tr>
     <tr>
-        <td style="font-size: 15px;"><a href="sinbun_sumiyosi2~5.html">新聞、段ボール、雑誌、チラシ</a></td>
+        <td style="font-size: 15px;"><a href="sinbun_shimohanezu.html">新聞、段ボール、雑誌、チラシ</a></td>
         <td id="sinbun"></td>
     </tr>
     <tr>
-        <td><a href="akibin_sumiyosi2~5.html">空きびん</a></td>
+        <td><a href="akibin_shimohanezu.html">空きびん</a></td>
         <td id="akibin"></td>
     </tr>
 </table>
