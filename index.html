@@ -1,0 +1,544 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>新発田市ごみ捨てナビカレンダー</title>
+<script type="text/javascript" src="kyuushibata.js"></script>
+<script type="text/javascript" src="toyoura.js"></script>
+<script>
+    // 年ごとに「syukujitu」と「moeru_possible_date」と「impossible_date」の日付を変更する
+
+    // 変数nowに現在の年月日データを入れる
+    var now = new Date(2025,3,28);
+    // 現在の年を取得
+    var year = now.getFullYear();
+    // '12/30', '12/31', '1/1', '1/2', '1/3'は新発田市のカレンダーと合わせるためにつけてある
+    var syukujitu = ['4/29', '5/3', '5/4', '5/5', '5/6', '7/21', '8/11', '9/15', '9/23', '10/13', '11/3', '11/23', '11/24', '12/30', '12/31', '1/1', '1/2', '1/3', '1/12', '2/11', '2/23', '3/20'];
+
+    function month_days_Number(month_now) {
+        if (month_now == 1 || month_now == 3 || month_now == 5 || month_now == 7 || month_now == 8 || month_now == 10 || month_now == 12) {
+            return 31;
+        } else if (month_now == 4 || month_now == 6 || month_now == 9 || month_now == 11) {
+            return 30;
+        } else if (year % 4 == 0 && year % 100 != 0 || year % 400 == 0) {
+            return 29;
+        } else {
+            return 28;
+        }
+    }
+
+    function date_number_make(month_now, date_now) {
+        if (month_now <= 3) {
+            if (String(date_now).length == 1) {
+                return String(Number(month_now + 12)) + '0' + String(date_now);
+            } else {
+                return String(Number(month_now + 12)) + String(date_now);
+            }
+        } else {
+            if (String(month_now).length == 1 && String(date_now).length == 1) {
+                return '0' + String(month_now) + '0' + String(date_now);
+            } else if (String(month_now).length == 2 && String(date_now).length == 1) {
+                return String(month_now) + '0' + String(date_now);
+            } else if (String(month_now).length == 1 && String(date_now).length == 2) {
+                return '0' + String(month_now) + String(date_now);
+            } if (String(month_now).length == 2 && String(date_now).length == 2) {
+                return String(month_now) + String(date_now);
+            }
+        }
+    }
+
+    var month = now.getMonth() + 1;
+    var date = now.getDate();
+    var trash_kind = ['燃えるごみ','燃えないごみ','空き缶類','発泡スチロール','古布','新聞、段ボール、雑誌、チラシ','空きびん'];
+    var possible_Calendar = [];
+
+    function make_calendar() {
+        var calendar = document.getElementById('calendar');
+        var last_day = month_days_Number(month);
+        var dayOfWeek_kanji = ['日','月','火','水','木','金','土'];
+        var calendar_year = year;
+        var calendar_month = month;
+        var calendar_date = date;
+
+        for (var i = 1; i < 16; i++) {
+            if (calendar_date > last_day) {
+                calendar_date = 1;
+                if (month + 1 == 13) {
+                    calendar_year++
+                    calendar_month = calendar_month - 11;
+                } else {
+                    calendar_month++
+                    if (calendar_month == 4) {
+                        break;
+                    }
+                }
+            }
+
+            // テーブルの行を追加する
+            let newRow = calendar.insertRow();
+            // テーブルの一つ目(左)のセルを追加する
+            let newCell = newRow.insertCell();
+            // テーブル二つ目(右)のセルを追加する
+            let newCell_2 = newRow.insertCell();
+            var month_and_date = date_number_make(calendar_month, calendar_date);
+            var dayOfWeek_now = new Date(calendar_year, calendar_month - 1, calendar_date).getDay();
+            // セルの日付の曜日を漢字に直す
+            var dayOfWeek_indication = '(' + dayOfWeek_kanji[dayOfWeek_now] + ')';
+            var date_indication = [calendar_month + '/' + calendar_date, dayOfWeek_indication];
+            for (var j = 0; j < 2; j++) {
+                var p = document.createElement("p");
+                var text = document.createTextNode(date_indication[j]);
+                p.appendChild(text);
+                newCell.appendChild(p);
+            }
+            for (var j = 0; j < possible_Calendar.length; j++) {
+                for (var l = 0; l < possible_Calendar[j].length; l++) {
+                    if (month_and_date == possible_Calendar[j][l]) {
+                        var p = document.createElement("p");
+                        var text = document.createTextNode(trash_kind[j]);
+                        p.appendChild(text);
+                        newCell_2.appendChild(p);
+                    }
+                }
+            }
+            
+            if (dayOfWeek_now == 6) {
+                newCell.setAttribute('class','saturday');
+            } else if (dayOfWeek_now == 0) {
+                newCell.setAttribute('class','sunday');
+            }
+            
+            for (var s = 0; s < syukujitu.length; s++) {
+                var now_date = calendar_month + '/' + calendar_date;
+                if (syukujitu[s] == now_date) {
+                    newCell.setAttribute('class','sunday');
+                }
+            }
+            calendar_date++;
+        }
+    }
+
+    function moeru(first, second, third) {
+        var year_now = year;
+        var month_now = month;
+        var date_now = date;
+        possible_Calendar[0] = [];
+        // 「家庭ごみ収集日程表」で燃えるごみの欄に「あり」と書かれている日付のうち基本の曜日以外に回収する日付
+        var moeru_possible_date = [];
+        // 「家庭ごみ収集日程表」で燃えるごみの欄に「なし」と書かれている日付
+        var impossible_date = [];
+        if (first == 1 && second == 3 && third == 5) {
+            moeru_possible_date = [];
+            impossible_date = ['1103','1231','1302','1411','1423','1520'];
+        } else if (first == 2 && second == 4 && third == 6) {
+            moeru_possible_date = [];
+            impossible_date = ['0429','0506','0923','1301','1303'];
+        } else {
+            moeru_possible_date = ['0428','0505','0922','1305','1521'];
+            impossible_date = ['0429','0506','0923','1302','1306','1520'];
+        }
+        for (var n = 0; n < moeru_possible_date.length; n++) {
+            possible_Calendar[0].push(moeru_possible_date[n]);
+        }
+        for (var i = 0; i < 16; i++) {
+            var dayOfWeek = new Date(year_now, month_now - 1, date_now).getDay();
+            if (date_now == month_days_Number(month) + 1) {
+                if (month_now + 1 >= 13) {
+                    year_now++
+                    month_now = month_now - 11;
+                } else {
+                    month_now++
+                }
+                date_now = 1;
+            }
+            
+            var candidate = '';
+            if (dayOfWeek == first || dayOfWeek == second || dayOfWeek == third) {
+                candidate = date_number_make(month_now, date_now);
+            }
+            for (var n = 0; n < impossible_date.length; n++) {
+                if (impossible_date[n] == candidate) {
+                    candidate = '';
+                }
+            }
+            date_now++;
+            possible_Calendar[0].push(candidate);
+        }
+    }
+
+    window.onload = function() {
+        var div_select = document.getElementById('select');
+        div_select.style.display = 'block';
+        var div_result = document.getElementById('result');
+        div_result.style.display = 'none';
+        if (month > 3) {
+            document.getElementById('now_version_select').textContent = year + '年4月～' + Number(year + 1) + '年3月';
+            document.getElementById('now_version_result').textContent = year + '年4月～' + Number(year + 1) + '年3月';
+        } else {
+            document.getElementById('now_version_select').textContent = Number(year - 1) + '年4月～' + year + '年3月';
+            document.getElementById('now_version_result').textContent = Number(year - 1) + '年4月～' + year + '年3月';
+        }
+    }
+
+    function result(selected_area) {
+        document.getElementById('title').textContent = selected_area.options[selected_area.selectedIndex].textContent;
+        var div_select = document.getElementById('select');
+        div_select.style.display = 'none';
+        var div_result = document.getElementById('result');
+        div_result.style.display = 'block';
+
+        if (selected_area.value == 'a_1') {
+            possible_Calendar = Calendar_a_1;
+            moeru(1, 3, 5);
+        } else if (selected_area.value == 'a_2') {
+            possible_Calendar = Calendar_a_2;
+            moeru(1, 3, 5);
+        } else if (selected_area.value == 'b_3') {
+            possible_Calendar = Calendar_b_3;
+            moeru(1, 3, 5);
+        } else if (selected_area.value == 'c_4') {
+            possible_Calendar = Calendar_c_4;
+            moeru(2, 4, 6);
+        } else if (selected_area.value == 'c_5') {
+            possible_Calendar = Calendar_c_5;
+            moeru(2, 4, 6);
+        } else if (selected_area.value == 'd_6') {
+            possible_Calendar = Calendar_d_6;
+            moeru(1, 3, 5);
+        } else if (selected_area.value == 'd_6_2') {
+            possible_Calendar = Calendar_d_6_2;
+            moeru(2, 5, );
+        } else if (selected_area.value == 'e_7') {
+            possible_Calendar = Calendar_e_7;
+            moeru(2, 4, 6);
+        } else if (selected_area.value == 'e_8') {
+            possible_Calendar = Calendar_e_8;
+            moeru(2, 4, 6);
+        } else if (selected_area.value == 'f_9') {
+            possible_Calendar = Calendar_f_9;
+            moeru(2, 4, 6);
+        } else if (selected_area.value == 'g_10') {
+            possible_Calendar = Calendar_g_10;
+            moeru(1, 3, 5);
+        } else if (selected_area.value == 'g_11') {
+            possible_Calendar = Calendar_g_11;
+            moeru(1, 3, 5);
+        } else if (selected_area.value == 'h_12') {
+            possible_Calendar = Calendar_h_12;
+            moeru(2, 4, 6);
+        } else if (selected_area.value == 'h_12_2') {
+            possible_Calendar = Calendar_h_12_2;
+            moeru(2, 5, );
+        } else if (selected_area.value == 't_13') {
+            possible_Calendar = Calendar_t_13;
+            moeru(1, 3, 5);
+        } else if (selected_area.value == 't_14') {
+            // (上荒町 荒町下区) 合成？ 竹園町 不明
+            possible_Calendar = Calendar_t_14;
+            moeru(2, 4, 6);
+        } else if (selected_area.value == 'k_15') {
+            // 下中 不明　(上草荷 下草荷（館野小路除く）) 合成？
+            possible_Calendar = Calendar_k_15;
+            moeru(1, 3, 5);
+        } else if (selected_area.value == 'k_16') {
+            // 駅前 不明
+            possible_Calendar = Calendar_k_16;
+            moeru(2, 4, 6);
+        } else if (selected_area.value == 'k_16_2') {
+            possible_Calendar = Calendar_k_16_2;
+            moeru(2, 5, );
+        } else if (selected_area.value == 's_17') {
+            // 米子 s_18からs_17に修正
+            possible_Calendar = Calendar_s_17;
+            moeru(1, 3, 5);
+            trash_kind = ['燃えるごみ','燃えないごみ','空き缶類','雑誌類','段ボール','空きびん、新聞、発泡スチロール','古布'];
+        } else if (selected_area.value == 's_18') {
+            // 関稲 福富 下古田 上端町 下町 下端町 下浦町 七助町 不明
+            possible_Calendar = Calendar_s_18;
+            moeru(1, 3, 5);
+            trash_kind = ['燃えるごみ','燃えないごみ','空き缶類','雑誌類','空きびん、段ボール、発泡スチロール','新聞','古布'];
+        }
+
+        make_calendar();
+
+        selected_area.options[0].selected = true;
+    }
+
+    function onemore() {
+        var div_select = document.getElementById('select');
+        div_select.style.display = 'block';
+        var div_result = document.getElementById('result');
+        div_result.style.display = 'none';
+
+        var calendar = document.getElementById('calendar');
+        for (var i = calendar.rows.length - 1; i >= 0; i--) {
+            calendar.deleteRow(i);
+        }
+    }
+</script>
+<style>
+body {
+    background-color: rgb(253, 253, 253);
+    margin: 0px;
+}
+h1 {
+    background-color: #39a73b;
+    color: #ffffff;
+    padding: 8px;
+    padding-top: 14px;
+    margin: 0px;
+}
+p {
+    margin: 5px;
+    font-size: 20px;
+}
+table tr:nth-child(odd){
+    background-color: #e2e0e0;
+}
+table {
+    font-size: 20px;
+    margin: 10px auto;
+    border-collapse: collapse;
+    width: 300px;
+}
+th {
+    text-align: center;
+    border:1px rgb(158, 158, 158) solid;
+    background-color: #39a73b;
+    color: #ffffff;
+    padding: 5px;
+}
+td {
+    text-align: center;
+    border:1px rgb(158, 158, 158) solid;
+    padding: 5px;
+    background-color: #ffffff;
+}
+select {
+    margin: 15px auto;
+    font-size: 20px;
+    width: 300px;
+    display: block;
+}
+option {
+    margin: 7px;
+    font-size: 20px;
+}
+button {
+    font-size: 20px;
+}
+.saturday {
+    background-color: #d1e5ff;
+}
+.sunday {
+    background-color: #fec3c3;
+}
+</style>
+</head>
+<body style="text-align: center; font-family: sans-serif;">
+<div id="select">
+    <h1>新発田市<br>ごみ捨てナビ</h1>
+    <p><a id="now_version_select"></p>
+    <p>住所を選んでください</p>
+    <select onchange="result(this)" name="area_select">
+        <option>ア行</option>
+        <option value="d_6">赤谷</option>
+        <option value="t_14">赤橋</option>
+        <option value="k_16">朝日団地</option>
+        <option value="e_7">荒町（上端の一部）（諏訪町・中央町側）</option>
+        <option value="a_1">荒町（上端の一部）（大栄町・御幸町側）</option>
+        <option value="t_14">池ノ端</option>
+        <option value="g_10">五十公野</option>
+        <option value="d_6_2">板山</option>
+        <option value="k_15">稲荷</option>
+        <option value="s_18">稲荷町</option>
+        <option value="s_18">稲荷岡</option>
+        <option value="t_14">大沢</option>
+        <option value="s_18">大島</option>
+        <option value="d_6_2">大槻</option>
+        <option value="c_4">大手町</option>
+        <option value="s_18">大中島</option>
+        <option value="k_16">大野</option>
+        <option value="k_16">岡島</option>
+        <option value="t_13">岡屋敷</option>
+        <option value="s_17">小川</option>
+        <option value="k_16">小国谷</option>
+        <option value="k_15">小島</option>
+        <option value="k_15">押廻</option>
+        <option value="t_14">乙次</option>
+    </select>
+    <select onchange="result(this)" name="area_select">
+        <option>カ行</option>
+        <option value="k_16">貝塚</option>
+        <option value="k_16">貝屋</option>
+        <option value="f_9">加治</option>
+        <option value="t_14">加治万代</option>
+        <option value="s_18">加治町</option>
+        <option value="s_18">片桐</option>
+        <option value="s_18">学校町</option>
+        <option value="k_16">金沢</option>
+        <option value="k_16">金塚（下金塚を除く）</option>
+        <option value="k_16">金山</option>
+        <option value="k_15">釜杭</option>
+        <option value="k_15">上今泉</option>
+        <option value="s_18">上浦町</option>
+        <option value="s_18">上新町</option>
+        <option value="s_18">上中町</option>
+        <option value="d_6_2">上羽津</option>
+        <option value="s_18">上町</option>
+        <option value="s_17">河岸場</option>
+        <option value="k_15">川口</option>
+        <option value="k_15">川尻</option>
+        <option value="d_6">川東（板山・上羽津除く）</option>
+        <option value="t_14">切梅</option>
+        <option value="t_14">久保</option>
+        <option value="h_12">桑ノ口</option>
+        <option value="k_15">高山寺</option>
+        <option value="t_13">興野</option>
+        <option value="k_16">光陽</option>
+        <option value="t_14">小坂</option>
+        <option value="s_18">古田</option>
+        <option value="k_15">湖南</option>
+        <option value="h_12">小舟町</option>
+    </select>
+    <select onchange="result(this)" name="area_select">
+        <option>サ行</option>
+        <option value="k_16">境</option>
+        <option value="t_14">佐々川</option>
+        <option value="b_3">佐々木</option>
+        <option value="h_12">島潟</option>
+        <option value="t_14">下飯塚</option>
+        <option value="k_16_2">下金塚</option>
+        <option value="k_16">下小中山</option>
+        <option value="k_16">下坂町</option>
+        <option value="k_15">下城</option>
+        <option value="k_15">下中（旧加治川村）</option>
+        <option value="s_18">下中沢</option>
+        <option value="t_14">下中ノ目</option>
+        <option value="h_12">下名柄</option>
+        <option value="k_16">下西山</option>
+        <option value="k_16">下山田</option>
+        <option value="e_8">城北町</option>
+        <option value="b_3">新栄町</option>
+        <option value="h_12">新富町</option>
+        <option value="f_9">菅谷</option>
+        <option value="k_16">住田</option>
+        <option value="s_18">住吉</option>
+        <option value="a_2">住吉町1丁目10番の一部</option>
+        <option value="a_2">住吉町2～5丁目</option>
+        <option value="c_5">住吉町1丁目（10番の一部を除く）</option>
+        <option value="e_7">諏訪町</option>
+        <option value="s_18">関井</option>
+        <option value="k_15">関妻</option>
+        <option value="k_15">草荷</option>
+        <option value="k_16">相馬</option>
+    </select>
+    <select onchange="result(this)" name="area_select">
+        <option>タ行</option>
+        <option value="a_1">大栄町</option>
+        <option value="t_14">大伝</option>
+        <option value="s_18">高島</option>
+        <option value="k_15">高田</option>
+        <option value="h_12">高浜</option>
+        <option value="t_13">滝沢</option>
+        <option value="t_14">竹ヶ花</option>
+        <option value="t_14">竹俣万代</option>
+        <option value="t_14">太斎</option>
+        <option value="e_7">中央町</option>
+        <option value="s_18">長者館</option>
+        <option value="k_15">塚田</option>
+        <option value="t_13">月岡</option>
+        <option value="t_13">月岡温泉</option>
+        <option value="k_16">寺尾</option>
+        <option value="t_13">天王</option>
+        <option value="t_14">戸板沢</option>
+        <option value="h_12">道賀</option>
+        <option value="h_12">東新町（3丁目町内会を除く）</option>
+        <option value="h_12_2">東新町3丁目町内会</option>
+        <option value="k_16">戸野港</option>
+        <option value="s_17">富島</option>
+        <option value="b_3">富塚町</option>
+    </select>
+    <select onchange="result(this)" name="area_select">
+        <option>ナ行</option>
+        <option value="s_18">中島</option>
+        <option value="s_17">長島</option>
+        <option value="c_5">中曽根町</option>
+        <option value="h_12">中田町</option>
+        <option value="k_16">中俵</option>
+        <option value="s_17">中野</option>
+        <option value="t_13">中之通</option>
+        <option value="s_18">中町</option>
+        <option value="t_14">中ノ目新田</option>
+        <option value="h_12">長畑</option>
+        <option value="h_12">中谷内</option>
+        <option value="k_16">西浦</option>
+        <option value="c_4">西園町</option>
+        <option value="h_12">西名柄</option>
+        <option value="k_15">二本木</option>
+        <option value="k_15">野中</option>
+        <option value="t_13">乗廻</option>
+    </select>
+    <select onchange="result(this)" name="area_select">
+        <option>ハ行</option>
+        <option value="k_16">箱岩</option>
+        <option value="t_13">八万</option>
+        <option value="s_18">浜坂町</option>
+        <option value="t_14">万代</option>
+        <option value="s_17">人橋</option>
+        <option value="k_16">平山</option>
+        <option value="s_18">福岡</option>
+        <option value="t_13">福島</option>
+        <option value="t_14">藤掛</option>
+        <option value="s_18">藤塚浜</option>
+        <option value="t_14">二ツ堂</option>
+        <option value="s_17">二ツ山</option>
+        <option value="c_5">舟入町1丁目1～7番</option>
+        <option value="a_2">舟入町1丁目8～17番</option>
+        <option value="c_5">舟入町2・3丁目</option>
+        <option value="k_15">古川</option>
+        <option value="k_15">古楯</option>
+        <option value="t_14">蛇塚</option>
+        <option value="t_13">本田</option>
+        <option value="h_12">本町</option>
+    </select>
+    <select onchange="result(this)" name="area_select">
+        <option>マ行</option>
+        <option value="g_10">松浦</option>
+        <option value="s_18">真中</option>
+        <option value="s_17">真野原</option>
+        <option value="s_17">真野原外</option>
+        <option value="b_3">弓越（赤沼町内会）</option>
+        <option value="t_13">三ツ椡</option>
+        <option value="e_8">緑町</option>
+        <option value="s_18">南成田</option>
+        <option value="s_17">宮吉</option>
+        <option value="a_1">御幸町</option>
+        <option value="k_15">向中条</option>
+    </select>
+    <select onchange="result(this)" name="area_select">
+        <option>ヤ行</option>
+        <option value="g_11">豊町</option>
+        <option value="t_14">動木橋</option>
+        <option value="k_16">横岡</option>
+        <option value="t_14">吉浦</option>
+        <option value="k_15">吉田</option>
+        <option value="d_6">米倉（大槻・米倉自治会を除く）</option>
+        <option value="d_6_2">米倉自治会</option>
+        <option value="s_17">米子</option>
+    </select>
+</div>
+<div id="result">
+<h1><a id="title"></a><br>ごみ捨てナビ</h1>
+<p><a id="now_version_result"></p>
+<p>収集日の午前8時30分までに<br>ごみステーションへ出してください。</p>
+<table id="calendar">
+    <tr>
+    </tr>
+</table>
+<button onclick="onemore()">住所選択画面に戻る</button>
+</div>
+<p style="font-size: 15px;">CC BY-SA 4.0</p>
+</body>
+</html>
